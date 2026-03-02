@@ -1,139 +1,169 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription & Connexion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription & Paiement</title>
 
-    <style>
-        
-    
-        #logo {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            
-        }
-
-        #logo img {
-            width: 100px;
-            max-width: 20vw;
-            height: auto;
-        }
-    
-
-        body {
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            background: rgb(149, 194, 149);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding-top: 20px;
-            margin: 0;
-            font-size: 19px;
-            
-        }
-
-        #logokyokushin {
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%);
-
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: rgb(149, 194, 149);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding-top: 20px;
+        font-size: 19px;
     }
-   
- 
 
-#logokyokushin img {
-    width: 60%;
-}
+    .main-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #003939;
+    }
 
+    #logo {
+        position: absolute;
+        top: 70px;
+        right: 10px;
+    }
 
+    #logo img {
+        width: 50px;
+        height: auto;
+    }
 
+    .container {
+        background: rgb(149, 194, 149);
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 20px;
+    }
 
-        .container {
-            background: rgb(149, 194, 149);
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-        }
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: rgb(0, 57, 57);
+        font-size: 22px;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 60px;
-            color: rgb(0, 57, 57);
-        }
+    input {
+        width: 60%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
 
-        input {
-            width: 60%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
+    button {
+        padding: 10px 20px;
+        background: #0070ba;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
 
-        button {
-            width: 80%;
-            padding: 10px;
-            background: #0070ba;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 0;
-        }
+    button:hover {
+        background: #005c99;
+    }
 
-        button:hover {
-            background: #005c99;
-        }
+    .switch {
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        color: #0070ba;
+        font-size: 14px;
+    }
 
-        .switch {
-            text-align: center;
-            margin-top: 15px;
-            cursor: pointer;
-            color: #0070ba;
-            font-size: 14px;
-        }
+    .hidden {
+        display: none;
+    }
 
-        .hidden {
-            display: none;
-        }
-    </style>
+    .mentions {
+        font-size: 12px;
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .cgu-box, .cgv-line {
+        font-size: 13px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .cgv-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bottom-login {
+        text-align: center;
+        font-size: 16px;
+        color: #003939;
+        font-weight: bold;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    .bottom-login:hover {
+        text-decoration: underline;
+    }
+
+    #logokyokushin {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+    }
+
+    #logokyokushin img {
+        width: 60%;
+    }
+</style>
 </head>
 
-    <div id="logo">
-          <img src="kanji-kyokushin.webp" alt="logo" >
+<body>
 
-          <style>
-          
-          #logo img {
-    width: 55px;
-    max-width: 20vw;
-    height: auto;
-    position:relative;
-    top: 20px;
-          }
-    </style>
+<div class="main-title">Outil Karate Kyokushinkai</div>
 
+<div id="logo">
+    <img src="kanji-kyokushin.webp" alt="logo">
+</div>
 
-          
-    </div>
-    
+<p class="mentions">
+    En créant un compte, vous acceptez nos  
+    <a href="legal-cgu.html" target="_blank">Conditions Générales d’Utilisation</a>.
+</p>
 
 <div class="container">
 
     <!-- INSCRIPTION -->
     <div id="signup">
         <h2>Inscription</h2>
+
         <input type="email" id="signup-email" placeholder="Email">
         <input type="password" id="signup-password" placeholder="Mot de passe">
-        <button onclick="register()">S'inscrire</button>
 
+        <!-- CGU obligatoire -->
+        <label class="cgu-box">
+            <input type="checkbox" id="accept-cgu">
+            J’accepte les <a href="legal-cgu.html" target="_blank">Conditions Générales d’Utilisation</a>.
+        </label>
+
+        <button onclick="register()">S'inscrire</button>
         <div class="switch" onclick="showLogin()">Déjà un compte ? Se connecter</div>
     </div>
 
@@ -143,65 +173,115 @@
         <input type="email" id="login-email" placeholder="Email">
         <input type="password" id="login-password" placeholder="Mot de passe">
         <button onclick="login()">Se connecter</button>
-
         <div class="switch" onclick="showSignup()">Créer un compte</div>
     </div>
 
+    <!-- CGV + bouton payer -->
+    <div class="cgv-line">
+        <label>
+            <input type="checkbox" id="accept-cgv">
+            J’accepte les <a href="legal-cgv.html" target="_blank">Conditions Générales de Vente</a>
+        </label>
+
+        <button onclick="payer()">Payer</button>
+    </div>
+
+    <!-- PayPal caché tant que CGV non cochées -->
+    <div id="paypal-button-container" class="hidden"></div>
+
+</div>
+
+<!-- LIEN SE CONNECTER EN BAS -->
+<div class="bottom-login" onclick="showLogin()">
+    Déjà un compte ? Se connecter
+</div>
+
+<div id="logokyokushin">
+    <img src="world_kyokushin_budokai.png">
 </div>
 
 <script>
-    function showLogin() {
-        document.getElementById("signup").classList.add("hidden");
-        document.getElementById("login").classList.remove("hidden");
+const API_URL = "http://localhost:5000/api/auth";
+
+function showLogin() {
+    document.getElementById("signup").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
+}
+
+function showSignup() {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("signup").classList.remove("hidden");
+}
+
+// INSCRIPTION
+async function register() {
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+    const acceptCGU = document.getElementById("accept-cgu").checked;
+
+    if (!email || !password) {
+        alert("Veuillez remplir tous les champs");
+        return;
     }
 
-    function showSignup() {
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("signup").classList.remove("hidden");
+    if (!acceptCGU) {
+        alert("Vous devez accepter les Conditions Générales d’Utilisation pour continuer.");
+        return;
     }
 
-    function register() {
-        let email = document.getElementById("signup-email").value;
-        let password = document.getElementById("signup-password").value;
+    try {
+        const res = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
 
-        if (!email || !password) {
-            alert("Veuillez remplir tous les champs");
-            return;
-        }
+        const data = await res.json();
+        alert(data.message || "Inscription réussie !");
+    } catch (error) {
+        alert("Erreur lors de l'inscription");
+    }
+}
 
-        localStorage.setItem("user", JSON.stringify({ email, password }));
+// CONNEXION
+async function login() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
 
-        alert("Inscription réussie !");
-        showLogin();
+    if (!email || !password) {
+        alert("Veuillez remplir tous les champs");
+        return;
     }
 
-    function login() {
-        let email = document.getElementById("login-email").value;
-        let password = document.getElementById("login-password").value;
+    try {
+        const res = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
 
-        let user = JSON.parse(localStorage.getItem("user"));
-
-        if (!user) {
-            alert("Aucun compte enregistré");
-            return;
-        }
-
-        if (email === user.email && password === user.password) {
-            alert("Connexion réussie !");
-            window.location.href = "interface.html"; 
-        } else {
-            alert("Email ou mot de passe incorrect");
-        }
+        const data = await res.json();
+        alert(data.message || "Connexion réussie !");
+    } catch (error) {
+        alert("Erreur lors de la connexion");
     }
+}
+
+// PAIEMENT
+function payer() {
+    const accept = document.getElementById("accept-cgv").checked;
+
+    if (!accept) {
+        alert("Vous devez accepter les Conditions Générales de Vente pour continuer.");
+        return;
+    }
+
+    document.getElementById("paypal-button-container").classList.remove("hidden");
+}
 </script>
-
-      
-
-<logokyokushin>
-              <div id="logokyokushin">
-                <img src="world_kyokushin_budokai.png">
-            </div>
-            </logokyokushin>
 
 </body>
 </html>
+
+
+

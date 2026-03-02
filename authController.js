@@ -1,56 +1,67 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const User = require('../models/User');
+const generateToken = require('../utils/generateToken');
+const bcrypt = require('bcryptjs');
+const paypal = require('@paypal/checkout-server-sdk');
 
-exports.register = async (req, res) => {
-    const { name, email, password } = req.body;
+// Configuration PayPal
+const environment = process.env.PAYPAL_MODE === 'live' 
+  ? new paypal.core.LiveEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET)
+  : new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
 
-    try {
-        const userExists = await User.findOne({ email });
-        if (userExists) return res.status(400).json({ message: "Email déjà utilisé" });
+const client = new paypal.core.PayPalHttpClient(environment);
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+// Inscription
+const registerUser = async (req, res) => {
+  const { name, email, password } = req.body;
+  const userExists = await User.findOne({ email });
 
-        const user = await User.create({ name, email, password: hashedPassword });
+  if (userExists) return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
 
-        res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            token: generateToken(user._id)
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Erreur serveur" });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await User.create({ name, email, password: hashedPassword });
+
+  res.status(201).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    token: generateToken(user._id)
+  });
+};
+
+// Paiement PayPal
+const createPayPalOrder = async (req, res) => {
+  const request = new paypal.orders.OrdersCreateRequest();
+  request.prefer('return=representation');
+  request.requestBody({
+    intent: 'CAPTURE',
+    purchase_units: [{ amount: { currency_code: 'EUR', value: '10.00' } }]
+  });
+
+  try {
+    const order = await client.execute(request);
+    res.json({ id: order.result.id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Capture paiement PayPal et mise à jour user
+const capturePayPalOrder = async (req, res) => {
+  const { orderID, userID } = req.body;
+  const request = new paypal.orders.OrdersCaptureRequest(orderID);
+  request.requestBody({});
+
+  try {
+    const capture = await client.execute(request);
+    if (capture.result.status === 'COMPLETED') {
+      const user = await User.findById(userID);
+      user.isPaid = true;
+      await user.save();
+      res.json({ message: 'Paiement réussi', user });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.login = async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Identifiants invalides" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Identifiants invalides" });
-
-    res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user._id)
-    });
-};
-
-exports.getMe = async (req, res) => {
-    res.json(req.user);
-};
-
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
-};
-
-//Gérer l’inscription, la connexion, et la récupération du profil.
-
-//Hasher les mots de passe.
-
-////Générer un token JWT.
+module.exports = { registerUser, createPayPalOrder, capturePayPalOrder };

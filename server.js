@@ -1,16 +1,16 @@
-require("dotenv").config();
-const app = require("./app");
-const connectDB = require("./config/db");
+const mongoose = require('mongoose');
 
-const PORT = process.env.PORT || 5501;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('✅ Connecté à MongoDB Atlas');
+  } catch (error) {
+    console.error('❌ Erreur MongoDB:', error.message);
+    process.exit(1);
+  }
+};
 
-// Connexion à MongoDB
-connectDB();
-
-// Lancement du serveur
-app.listen(PORT, () => {
-    console.log("Serveur lancé sur le port " + PORT);
-});
-
-
- 
+module.exports = connectDB;
