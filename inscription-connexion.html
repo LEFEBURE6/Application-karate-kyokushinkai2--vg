@@ -26,17 +26,6 @@
         color: #003939;
     }
 
-    #logo {
-        position: absolute;
-        top: 70px;
-        right: 10px;
-    }
-
-    #logo img {
-        width: 50px;
-        height: auto;
-    }
-
     .container {
         background: rgb(149, 194, 149);
         padding: 30px;
@@ -53,7 +42,7 @@
     }
 
     input {
-        width: 60%;
+        width: 100%;
         padding: 10px;
         margin: 10px 0;
         border-radius: 8px;
@@ -69,6 +58,7 @@
         border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
+        white-space: nowrap;
     }
 
     button:hover {
@@ -96,41 +86,69 @@
         max-width: 400px;
     }
 
-    .cgu-box, .cgv-line {
-        font-size: 13px;
-        margin-top: 10px;
-        margin-bottom: 20px;
-    }
-
-    .cgv-line {
+    .line {
         display: flex;
+        justify-content: space-between;
         align-items: center;
         gap: 10px;
+        margin-top: 15px;
     }
 
-    .bottom-login {
+    .inline-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    /* Texte Se connecter */
+    .login-text {
         text-align: center;
-        font-size: 16px;
+        font-size: 20px;
         color: #003939;
         font-weight: bold;
-        margin-top: 20px;
+        margin-top: 25px;
+        margin-bottom: 5px;
         cursor: pointer;
     }
 
-    .bottom-login:hover {
+    .login-text:hover {
         text-decoration: underline;
     }
 
+    /* Flèche clignotante */
+    .arrow {
+        text-align: center;
+        font-size: 30px;
+        color: #003939;
+        animation: blink 1s infinite;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    /* Logo Budokai cliquable */
     #logokyokushin {
         position: fixed;
         bottom: 40px;
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
+        cursor: pointer;
     }
 
     #logokyokushin img {
         width: 60%;
+        transition: transform 0.2s ease;
+    }
+
+    #logokyokushin:hover img {
+        transform: scale(1.05);
     }
 </style>
 </head>
@@ -138,10 +156,6 @@
 <body>
 
 <div class="main-title">Outil Karate Kyokushinkai</div>
-
-<div id="logo">
-    <img src="kanji-kyokushin.webp" alt="logo">
-</div>
 
 <p class="mentions">
     En créant un compte, vous acceptez nos  
@@ -157,47 +171,56 @@
         <input type="email" id="signup-email" placeholder="Email">
         <input type="password" id="signup-password" placeholder="Mot de passe">
 
-        <!-- CGU obligatoire -->
-        <label class="cgu-box">
-            <input type="checkbox" id="accept-cgu">
-            J’accepte les <a href="legal-cgu.html" target="_blank">Conditions Générales d’Utilisation</a>.
-        </label>
+        <!-- CGU -->
+        <div class="line">
+            <label class="inline-label">
+                <input type="checkbox" id="accept-cgu">
+                J’accepte les <a href="legal-cgu.html" target="_blank">CGU</a>
+            </label>
 
-        <button onclick="register()">S'inscrire</button>
-        <div class="switch" onclick="showLogin()">Déjà un compte ? Se connecter</div>
+            <button onclick="register()">S'inscrire</button>
+        </div>
     </div>
 
     <!-- CONNEXION -->
     <div id="login" class="hidden">
         <h2>Connexion</h2>
+
         <input type="email" id="login-email" placeholder="Email">
         <input type="password" id="login-password" placeholder="Mot de passe">
+
         <button onclick="login()">Se connecter</button>
+
         <div class="switch" onclick="showSignup()">Créer un compte</div>
     </div>
 
-    <!-- CGV + bouton payer -->
-    <div class="cgv-line">
-        <label>
+    <!-- CGV + Payer -->
+    <div class="line">
+        <label class="inline-label">
             <input type="checkbox" id="accept-cgv">
-            J’accepte les <a href="legal-cgv.html" target="_blank">Conditions Générales de Vente</a>
+            J’accepte les <a href="legal-cgv.html" target="_blank">CGV</a>
         </label>
 
-        <button onclick="payer()">Payer</button>
+        <button onclick="payer()">Payer 10 euros</button>
     </div>
 
-    <!-- PayPal caché tant que CGV non cochées -->
     <div id="paypal-button-container" class="hidden"></div>
 
 </div>
 
-<!-- LIEN SE CONNECTER EN BAS -->
-<div class="bottom-login" onclick="showLogin()">
-    Déjà un compte ? Se connecter
+<!-- TEXTE SE CONNECTER -->
+<div class="login-text" onclick="showLogin()">
+    Se connecter
 </div>
 
-<div id="logokyokushin">
-    <img src="world_kyokushin_budokai.png">
+<!-- FLÈCHE CLIGNOTANTE -->
+<div class="arrow" onclick="showLogin()">
+    ↓
+</div>
+
+<!-- LOGO BUDOKAI CLIQUABLE -->
+<div id="logokyokushin" onclick="showLogin()">
+    <img src="world_kyokushin_budokai.png" alt="Connexion">
 </div>
 
 <script>
@@ -213,7 +236,6 @@ function showSignup() {
     document.getElementById("signup").classList.remove("hidden");
 }
 
-// INSCRIPTION
 async function register() {
     const email = document.getElementById("signup-email").value;
     const password = document.getElementById("signup-password").value;
@@ -243,7 +265,6 @@ async function register() {
     }
 }
 
-// CONNEXION
 async function login() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
@@ -267,7 +288,6 @@ async function login() {
     }
 }
 
-// PAIEMENT
 function payer() {
     const accept = document.getElementById("accept-cgv").checked;
 
@@ -282,6 +302,5 @@ function payer() {
 
 </body>
 </html>
-
 
 
