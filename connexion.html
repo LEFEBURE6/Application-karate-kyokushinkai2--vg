@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -82,12 +83,117 @@
     <div class="container">
         <h2>Connexion</h2>
 
+        <!-- Champs non obligatoires -->
         <input type="email" id="login-email" placeholder="Email">
         <input type="password" id="login-password" placeholder="Mot de passe">
     </div>
 
     <!-- Logo Budokai = bouton de connexion -->
     <div id="logokyokushin" onclick="login()">
+        <img src="world_kyokushin_budokai.png" alt="Connexion">
+    </div>
+
+<script>
+function login() {
+    // Redirection immédiate sans aucune vérification
+    window.location.href = "interface.html";
+}
+</script>
+
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: rgb(149, 194, 149);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 40px;
+            margin: 0;
+            font-size: 19px;
+        }
+
+        #logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #logo img {
+            width: 43px;
+            height: auto;
+        }
+
+        .container {
+            background: rgb(149, 194, 149);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: rgb(0, 57, 57);
+            margin-bottom: 40px;
+        }
+
+        input {
+            width: 70%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #logokyokushin {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #logokyokushin img {
+            width: 60%;
+            transition: transform 0.2s ease;
+        }
+
+        #logokyokushin:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    
+   <div id="logo">
+        <img src="kanji-kyokushin.webp" alt="logo">
+    </div>
+
+    <div class="container">
+        <h2>Connexion</h2>
+
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Mot de passe">
+    </div>
+
+ 
+  <div id="logokyokushin" onclick="login()">
         <img src="world_kyokushin_budokai.png" alt="Connexion">
     </div>
 
@@ -129,58 +235,3 @@ async function login() {
 </body>
 </html>
 
-<!-- <script>
-const API_URL = "http://localhost:5000/api/auth"; // ton backend
-
-function showLogin() {
-    document.getElementById("signup").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
-}
-
-function showSignup() {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("signup").classList.remove("hidden");
-}
-
-// INSCRIPTION
-async function register() {
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
-
-    if (!email || !password) {
-        alert("Veuillez remplir tous les champs");
-        return;
-    }
-
-    try {
-        const res = await fetch(`${API_URL}/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: email.split("@")[0], email, password })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-            alert("Inscription réussie ! Veuillez vous connecter et payer 10€");
-            showLogin();
-        } else {
-            alert(data.message);
-        }
-    } catch (err) {
-        alert("Erreur serveur");
-        console.error(err);
-    }
-}
-
-// CONNEXION
-async function login() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    try {
-        // Ici, tu devrais appeler une route login (à créer) pour obtenir le token
-        const res = await fetch(`${API_URL}/register`, { // temporaire pour tester
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: email.split("@")[0], email, password })
-        });
