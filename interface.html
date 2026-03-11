@@ -1,101 +1,128 @@
 <!doctype html>
-    <html lang="fr">
-      <head>
-        <title>Application-karate-kyokushinkai2</title>
-        
-        <meta charset="utf-8" >
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css" >
-      </head>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Application-karate-kyokushinkai2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <body>
-        
-        
-        <div id="logo">
-          <img src="kanji-kyokushin.png" alt="logo" >
-        
-          </div>
+    <!-- Ton CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
 
-          <header> 
-          
-          <div class="container text-center">
-  <div class="row">
-    <div class="col-12 ">
-      <h1>Karaté Kyokushinkai</h1>
-          </div>
-         </div>
-      </div>
-    
-        </header>
-      
-      
+<body>
 
-      
-      <h2>Grades et ceintures</h2>
+    <!-- Logo en haut -->
+    <div id="logo">
+        <img src="kanji-kyokushin.png" alt="logo">
+    </div>
 
-        <main>
-          
-            
-         <ul class="liste-kyu">
+    <!-- Header -->
+    <header>
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Karaté Kyokushinkai</h1>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <li class="kyu10">
-    <a href="page kyu 10.html">Kyu 10</a>
-  </li>
+    <h2>Grades et ceintures</h2>
 
-  <li class="kyu9">
-    <a href="page kyu 9.html">Kyu 9</a>
-  </li>
+    <main>
 
-  <li class="kyu8">
-    <a href="page kyu 8.html">Kyu 8</a>
-  </li>
+        <ul class="liste-kyu">
 
-  <li class="kyu7">
-    <a href="page kyu 7.html">Kyu 7</a>
-  </li>
+            <li class="kyu10">
+                <a href="page kyu 10.html">Kyu 10</a>
+            </li>
 
-  <li class="kyu6">
-    <a href="page kyu 6.html">Kyu 6</a>
-  </li>
+            <li class="kyu9">
+                <a href="page kyu 9.html">Kyu 9</a>
+            </li>
 
-  <li class="kyu5">
-    <a href="page kyu 5.html">Kyu 5</a>
-  </li>
+            <li class="kyu8">
+                <a href="page kyu 8.html">Kyu 8</a>
+            </li>
 
-  <li class="kyu4">
-    <a href="page kyu 4.html">Kyu 4</a>
-  </li>
+            <li class="kyu7">
+                <a href="page kyu 7.html">Kyu 7</a>
+            </li>
 
-  <li class="kyu3">
-    <a href="page kyu 3.html">Kyu 3</a>
-  </li>
+            <li class="kyu6">
+                <a href="page kyu 6.html">Kyu 6</a>
+            </li>
 
-  <li class="kyu2">
-    <a href="page kyu 2.html">Kyu 2</a>
-  </li>
+            <li class="kyu5">
+                <a href="page kyu 5.html">Kyu 5</a>
+            </li>
 
-  <li class="kyu1">
-    <a href="page kyu 1.html">Kyu 1</a>
-  </li>
- 
+            <li class="kyu4">
+                <a href="page kyu 4.html">Kyu 4</a>
+            </li>
 
- 
-    <li class="shodan">
-    <a href="page Shodan 1 Dan.html">Shodan 1er Dan</a>
-  </li>
-  </ul>
+            <li class="kyu3">
+                <a href="page kyu 3.html">Kyu 3</a>
+            </li>
 
+            <li class="kyu2">
+                <a href="page kyu 2.html">Kyu 2</a>
+            </li>
 
+            <li class="kyu1">
+                <a href="page kyu 1.html">Kyu 1</a>
+            </li>
 
+            <li class="shodan">
+                <a href="page Shodan 1 Dan.html">Shodan 1er Dan</a>
+            </li>
 
-             
+        </ul>
 
+        <!-- Logo vers lexique -->
+        <div id="logokyokushin">
+            <a href="page lexique.html">
+                <img src="world_kyokushin_budokai.png" alt="logokyokushin">
+            </a>
+        </div>
 
-<div id="logokyokushin">
-    <a href="page lexique.html">
-        <img src="world_kyokushin_budokai.png" alt="logokyokushin">
-    </a>
-</div>
+    </main>
+
+    <!-- 🔐 Sécurisation de la page -->
+    <script>
+        async function checkAccess() {
+            const token = localStorage.getItem("token");
+
+            // Pas de token → redirection
+            if (!token) {
+                window.location.href = "inscription-connexion.html";
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:5000/api/auth/me", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                const data = await res.json();
+
+                // Token invalide ou utilisateur non payé → redirection
+                if (!res.ok || !data.isPaid) {
+                    window.location.href = "inscription-connexion.html";
+                }
+
+            } catch (error) {
+                window.location.href = "inscription-connexion.html";
+            }
+        }
+
+        // Vérification immédiate à l’ouverture de la page
+        checkAccess();
+    </script>
+
+</body>
+</html>
+
 
 
 

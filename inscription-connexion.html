@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inscription & Paiement</title>
+<title>Inscription</title>
 
 <style>
     body {
@@ -63,26 +63,6 @@
 
     button:hover {
         background: #005c99;
-    }
-
-    .switch {
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        color: #0070ba;
-        font-size: 14px;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    .line {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        margin-top: 15px;
     }
 
     .inline-label {
@@ -147,46 +127,17 @@
 
 <div class="container">
 
-    <!-- INSCRIPTION -->
-    <div id="signup">
-        <h2>Inscription</h2>
+    <h2>Inscription</h2>
 
-        <input type="email" id="signup-email" placeholder="Email">
-        <input type="password" id="signup-password" placeholder="Mot de passe">
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Mot de passe">
 
-        <div class="line">
-            <label class="inline-label">
-                <input type="checkbox" id="accept-cgu">
-                J’accepte les <a href="legal-cgu.html" target="_blank">CGU</a>
-            </label>
+    <label class="inline-label">
+        <input type="checkbox" id="accept-cgu">
+        J’accepte les <a href="legal-cgu.html" target="_blank">CGU</a>
+    </label>
 
-            <button onclick="register()">S'inscrire</button>
-        </div>
-    </div>
-
-    <!-- CONNEXION (masquée ici, mais tu peux la supprimer si tu veux une page séparée) -->
-    <div id="login" class="hidden">
-        <h2>Connexion</h2>
-
-        <input type="email" id="login-email" placeholder="Email">
-        <input type="password" id="login-password" placeholder="Mot de passe">
-
-        <button onclick="login()">Se connecter</button>
-
-        <div class="switch" onclick="showSignup()">Créer un compte</div>
-    </div>
-
-    <!-- CGV + Paiement -->
-    <div class="line">
-        <label class="inline-label">
-            <input type="checkbox" id="accept-cgv">
-            J’accepte les <a href="legal-cgv.html" target="_blank">CGV</a>
-        </label>
-
-        <button onclick="payer()">Payer 10 euros</button>
-    </div>
-
-    <div id="paypal-button-container" class="hidden"></div>
+    <button onclick="register()">S'inscrire</button>
 
 </div>
 
@@ -214,12 +165,12 @@ async function register() {
     const acceptCGU = document.getElementById("accept-cgu").checked;
 
     if (!email || !password) {
-        alert("Veuillez remplir tous les champs");
+        alert("Veuillez remplir tous les champs.");
         return;
     }
 
     if (!acceptCGU) {
-        alert("Vous devez accepter les Conditions Générales d’Utilisation pour continuer.");
+        alert("Vous devez accepter les CGU.");
         return;
     }
 
@@ -231,26 +182,30 @@ async function register() {
         });
 
         const data = await res.json();
-        alert(data.message || "Inscription réussie !");
+
+        if (!res.ok) {
+            alert(data.message);
+            return;
+        }
+
+        localStorage.setItem("token", data.token);
+
+        alert("Inscription réussie !");
+        window.location.href = "paiement.html";
+
     } catch (error) {
-        alert("Erreur lors de l'inscription");
+        alert("Erreur serveur.");
     }
-}
-
-function payer() {
-    const accept = document.getElementById("accept-cgv").checked;
-
-    if (!accept) {
-        alert("Vous devez accepter les Conditions Générales de Vente pour continuer.");
-        return;
-    }
-
-    document.getElementById("paypal-button-container").classList.remove("hidden");
 }
 </script>
 
 </body>
 </html>
+
+
+
+
+
 
 
 
