@@ -2,6 +2,7 @@ const User = require('../models/User');
 const generateToken = require('../util/generateToken');
 const bcrypt = require('bcryptjs');
 const paypal = require('@paypal/checkout-server-sdk');
+const crypto = require("crypto");
 
 // Configuration PayPal
 const environment = process.env.PAYPAL_MODE === 'live'
@@ -10,7 +11,9 @@ const environment = process.env.PAYPAL_MODE === 'live'
 
 const client = new paypal.core.PayPalHttpClient(environment);
 
-// Inscription
+/* ============================
+   INSCRIPTION
+============================ */
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -28,7 +31,81 @@ const registerUser = async (req, res) => {
   });
 };
 
-// Création d’un ordre PayPal
+/* ============================
+   MOT DE PASSE OUBLIÉ
+============================ */
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+      const user = await User.findOne({ email });
+
+      // On ne révèle pas si l'email existe ou non
+      if (!user) {
+          return res.status(200).json({
+              message: "Si cet email existe, un lien de réinitialisation a été envoyé."
+          });
+      }
+
+      // Génération d’un token sécurisé
+      const resetToken = crypto.randomBytes(32).toString("hex");
+
+      // Stockage du token + expiration (15 minutes)
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+      await user.save();
+
+      // Pour l'instant, on renvoie le token (utile pour tests)
+      return res.status(200).json({
+          message: "Lien de réinitialisation généré.",
+          resetToken
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur serveur." });
+  }
+};
+
+/* ============================
+   RÉINITIALISATION DU MOT DE PASSE
+============================ */
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+      const user = await User.findOne({
+          resetPasswordToken: token,
+          resetPasswordExpire: { $gt: Date.now() }
+      });
+
+      if (!user) {
+          return res.status(400).json({ message: "Lien invalide ou expiré." });
+      }
+
+      // Hash du nouveau mot de passe
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+
+      // Suppression du token
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save();
+
+      res.status(200).json({ message: "Mot de passe réinitialisé avec succès." });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur serveur." });
+  }
+};
+
+/* ============================
+   PAYPAL : CRÉATION D’ORDRE
+============================ */
 const createPayPalOrder = async (req, res) => {
   const request = new paypal.orders.OrdersCreateRequest();
   request.prefer('return=representation');
@@ -47,7 +124,9 @@ const createPayPalOrder = async (req, res) => {
   }
 };
 
-// Capture PayPal + mise à jour user
+/* ============================
+   PAYPAL : CAPTURE + MISE À JOUR USER
+============================ */
 const capturePayPalOrder = async (req, res) => {
   const { orderID } = req.body;
 
@@ -72,5 +151,12 @@ const capturePayPalOrder = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, createPayPalOrder, capturePayPalOrder };
+module.exports = { 
+  registerUser, 
+  createPayPalOrder, 
+  capturePayPalOrder,
+  forgotPassword,
+  resetPassword
+};
+
 
