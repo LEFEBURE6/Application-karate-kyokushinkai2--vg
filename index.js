@@ -6,17 +6,24 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
+// 🔗 Connexion MongoDB
 connectDB();
 
+// 🔓 Autoriser les requêtes (CORS)
 app.use(cors());
+
+// 📦 Parser JSON
 app.use(express.json());
 
+// 🔐 Routes AUTH
 app.use('/api/auth', authRoutes);
 
-app.get("/", (req, res) => {
+// 🧪 Route test
+app.get('/', (req, res) => {
   res.json({ message: "Backend opérationnel ✔️" });
 });
 
+// 🚀 Lancer serveur
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
