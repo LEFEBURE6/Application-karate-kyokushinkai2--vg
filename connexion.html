@@ -43,13 +43,16 @@
             margin-bottom: 40px;
         }
 
-        input {
-            width: 70%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+        .checkbox-group {
+            text-align: left;
+            margin-left: 15%;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
 
         #logokyokushin {
@@ -82,8 +85,17 @@
     <div class="container">
         <h2>Connexion</h2>
 
-        <input type="email" id="login-email" placeholder="Email">
-        <input type="password" id="login-password" placeholder="Mot de passe">
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="cgu">
+                J’accepte les <a href="cgu.html" target="_blank">Conditions Générales d’Utilisation</a>
+            </label>
+
+            <label>
+                <input type="checkbox" id="confidentialite">
+                J’accepte la <a href="confidentialite.html" target="_blank">Politique de confidentialité</a>
+            </label>
+        </div>
     </div>
 
     <!-- Logo Budokai = bouton de connexion -->
@@ -92,50 +104,22 @@
     </div>
 
 <script>
-/* URL API Render */
-const API_URL = "https://application-karate-kyokushinkai2.onrender.com/api/auth/login";
+function login() {
+    const cgu = document.getElementById("cgu").checked;
+    const conf = document.getElementById("confidentialite").checked;
 
-async function login() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    if (!email || !password) {
-        alert("Veuillez remplir tous les champs.");
+    if (!cgu || !conf) {
+        alert("Vous devez accepter les deux conditions pour continuer.");
         return;
     }
 
-    try {
-        const res = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert(data.message || "Identifiants incorrects.");
-            return;
-        }
-
-        /* Stockage du token */
-        localStorage.setItem("token", data.token);
-
-        /* Redirection selon paiement */
-        if (!data.isPaid) {
-            window.location.href = "paiement.html";
-            return;
-        }
-
-        window.location.href = "interface.html";
-
-    } catch (error) {
-        alert("Erreur serveur.");
-    }
+    // Si les deux cases sont cochées → redirection
+    window.location.href = "interface.html";
 }
 </script>
 
 </body>
 </html>
+
 
 

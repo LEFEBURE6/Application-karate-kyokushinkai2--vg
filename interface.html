@@ -52,51 +52,8 @@
 
     </main>
 
-    <!-- 🔐 Sécurisation de la page -->
-    <script>
-        const API_URL = "https://application-karate-kyokushinkai2.onrender.com/api/auth";
-
-        async function checkAccess() {
-            const token = localStorage.getItem("token");
-
-            if (!token) {
-                window.location.href = "inscription-connexion.html";
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_URL}/me`, {
-                    headers: { "Authorization": "Bearer " + token }
-                });
-
-                const data = await res.json();
-
-                if (!res.ok || !data.isPaid) {
-                    window.location.href = "inscription-connexion.html";
-                }
-
-            } catch (error) {
-                window.location.href = "inscription-connexion.html";
-            }
-        }
-
-        checkAccess();
-    </script>
-
 </body>
 </html>
-
-
-
-
-
-         
-          
-          
-          
-          </main>
-      </body>
-    </html>
 
 
 
